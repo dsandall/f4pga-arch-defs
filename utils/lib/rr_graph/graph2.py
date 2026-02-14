@@ -92,10 +92,12 @@ class SegmentTiming(namedtuple('SegmentTiming', 'r_per_meter c_per_meter')):
     """
 
 
-class Segment(namedtuple('Segment', 'id name timing')):
+class Segment(namedtuple('Segment', 'id name timing length res_type')):
     """Encapsulate VPR segment tag. Contains SegmentTiming to encapsulate the timing attributes
     see: https://vtr-verilog-to-routing.readthedocs.io/en/latest/arch/reference.html#wire-segments
     """
+
+Segment.__new__.__defaults__ = (0, None)
 
 
 class Pin(namedtuple('Pin', 'ptc name')):
@@ -117,7 +119,7 @@ class BlockType(namedtuple('BlockType', 'id name width height pin_class')):
 
 
 class GridLoc(namedtuple('GridLoc',
-                         'x y block_type_id width_offset height_offset')):
+                         'x y block_type_id width_offset height_offset layer')):
     """
     """
 
@@ -273,6 +275,12 @@ class Graph(object):
                 self.block_types
             ), loc.block_type_id
             block_type = self.block_types[loc.block_type_id]
+
+            # New VPR (3D FPGA support) may emit multiple grid entries
+            # for the same (x, y) with different layers. For 2D chips,
+            # only process layer-0 entries.
+            if loc.layer != 0:
+                continue
 
             key = (loc.x, loc.y)
             assert key not in self.loc_map

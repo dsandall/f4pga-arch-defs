@@ -62,7 +62,8 @@ class Graph2Tests(unittest.TestCase):
 
         self.grid = [
             GridLoc(
-                x=0, y=0, block_type_id=0, width_offset=0, height_offset=0
+                x=0, y=0, block_type_id=0, width_offset=0, height_offset=0,
+                layer=0
             ),
         ]
 
@@ -277,7 +278,8 @@ class Graph2MediumTests(unittest.TestCase):
 
         self.grid = [
             GridLoc(
-                x=0, y=0, block_type_id=0, width_offset=0, height_offset=0
+                x=0, y=0, block_type_id=0, width_offset=0, height_offset=0,
+                layer=0
             ),
         ]
 

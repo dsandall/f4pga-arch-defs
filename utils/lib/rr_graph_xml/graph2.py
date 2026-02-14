@@ -188,6 +188,7 @@ def graph_from_xml(
                     block_type_id=int(element.attrib['block_type_id']),
                     width_offset=int(element.attrib['width_offset']),
                     height_offset=int(element.attrib['height_offset']),
+                    layer=int(element.attrib.get('layer', 0)),
                 )
             )
 

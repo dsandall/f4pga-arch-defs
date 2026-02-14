@@ -123,7 +123,9 @@ def read_segment(seg):
         timing=graph2.SegmentTiming(
             r_per_meter=timing.rPerMeter,
             c_per_meter=timing.cPerMeter,
-        )
+        ),
+        length=getattr(seg, 'length', 0),
+        res_type=str(seg.resType) if hasattr(seg, 'resType') else None,
     )
 
 
@@ -160,6 +162,7 @@ def read_grid_loc(grid_loc):
         block_type_id=grid_loc.blockTypeId,
         width_offset=grid_loc.widthOffset,
         height_offset=grid_loc.heightOffset,
+        layer=getattr(grid_loc, 'layer', 0),
     )
 
 
@@ -472,6 +475,12 @@ class Graph(object):
             out_segment.id = segment.id
             out_segment.name = segment.name
 
+            if segment.length:
+                out_segment.length = segment.length
+
+            if segment.res_type is not None:
+                out_segment.resType = segment.res_type
+
             if segment.timing:
                 timing = out_segment.timing
                 timing.cPerMeter = segment.timing.c_per_meter
@@ -517,6 +526,7 @@ class Graph(object):
             out_grid_loc.blockTypeId = grid_loc.block_type_id
             out_grid_loc.widthOffset = grid_loc.width_offset
             out_grid_loc.heightOffset = grid_loc.height_offset
+            out_grid_loc.layer = grid_loc.layer
 
     def serialize_to_capnp(
             self,
