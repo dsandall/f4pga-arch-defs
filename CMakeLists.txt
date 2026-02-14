@@ -91,14 +91,12 @@ add_subdirectory(common)
 add_subdirectory(utils)
 add_subdirectory(vpr)
 add_subdirectory(library)
-# Disable 7-series support in CI because it consumes too much memory.
-if (NOT LIGHT_BUILD)
-  add_subdirectory(xilinx)
-endif()
-add_subdirectory(lattice/ice40)
-add_subdirectory(quicklogic)
-add_subdirectory(testarch)
-add_subdirectory(tests)
+# Only build xilinx (xc7) — skip ice40/quicklogic/testarch
+add_subdirectory(xilinx)
+#add_subdirectory(lattice/ice40)
+#add_subdirectory(quicklogic)
+#add_subdirectory(testarch)
+#add_subdirectory(tests)
 
 get_target_property_required(YAPF env YAPF)
 add_custom_target(
@@ -116,45 +114,6 @@ add_custom_target(
   COMMAND ${f4pga-arch-defs_SOURCE_DIR}/common/python_health_helper.sh -l -p "${FLAKE8}"
   )
 
-
-add_custom_target(all_ice40_demos)
-add_dependencies(all_ice40_demos
-    all_icestick_bin
-    all_iceblink40-lp1k_bin
-    )
-
-add_custom_target(all_ice40_route_tests)
-add_dependencies(all_ice40_route_tests
-    all_dummy_ice40_hx1k_tq144_route
-    all_dummy_ice40_lp1k_qn84_route
-    all_dummy_ice40_hx1k_tq144_route
-    )
-
-if (NOT LIGHT_BUILD)
-add_dependencies(all_ice40_demos
-    all_icevision_bin
-    all_hx8k-b-evn_bin
-    all_tinyfpga-bx_bin
-    all_tinyfpga-b2_bin
-    )
-add_dependencies(all_ice40_route_tests
-    all_dummy_ice40_up5k_sg48_route
-    all_dummy_ice40_lp8k_cm81_route
-    all_dummy_ice40_hx8k_ct256_route
-    )
-endif()
-
-add_custom_target(all_ice40)
-add_dependencies(all_ice40
-    all_ice40_demos
-    all_ice40_tests
-    all_ice40_route_tests
-    )
-
-add_custom_target(all_quicklogic)
-add_dependencies(all_quicklogic
-    all_quicklogic_tests
-    )
 
 add_custom_target(all_xc7_route_tests)
 
@@ -202,11 +161,6 @@ add_dependencies(all_xc7
     all_xc7_route_tests
     all_xc7_tests
     )
-if (NOT LIGHT_BUILD)
-add_dependencies(all_xc7
-    test_dram_packing
-    )
-endif()
 
 add_custom_target(all_xc7_200t)
 if (NOT LIGHT_BUILD)
@@ -216,23 +170,13 @@ add_dependencies(all_xc7_200t
     )
 endif()
 
-add_custom_target(all_testarch)
-add_dependencies(all_testarch
-    all_dummy_testarch_10x10_dummy_route
-    all_dummy_testarch_4x4_dummy_route
-    )
-
 add_custom_target(all_demos)
 add_dependencies(all_demos
-    all_ice40_demos
     all_xc7_demos
     )
 
 add_custom_target(all_tests)
 add_dependencies(all_tests
-    all_testarch
-    all_ice40_tests
-    all_quicklogic_tests
     all_xc7_tests
     )
 

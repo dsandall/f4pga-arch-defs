@@ -1,7 +1,7 @@
 # Makefile
 TOP_DIR := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
 REQUIREMENTS_FILE := requirements.txt
-ENVIRONMENT_FILE := conda_lock.yml
+ENVIRONMENT_FILE := conda_base.yml
 
 third_party/make-env/conda.mk:
 	git submodule init
@@ -29,6 +29,7 @@ env:: export PIP_NO_DEPS = true
 env:: | $(CONDA_ENV_PYTHON)
 	git submodule init
 	git submodule update --init --recursive
+	@$(IN_CONDA_ENV) ./install_editable_deps.sh
 	@$(IN_CONDA_ENV) mkdir -p build && cd build && $(CMAKE_COMMAND) ${CMAKE_FLAGS} ..
 
 build/Makefile:
