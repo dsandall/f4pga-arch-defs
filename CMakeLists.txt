@@ -59,7 +59,7 @@ add_env_executable(EXE iverilog REQUIRED)
 add_env_executable(EXE xcfasm REQUIRED)
 add_env_executable(EXE qlfasm REQUIRED)
 add_env_executable(EXE qlf_fasm REQUIRED)
-add_env_executable(EXE quicklogic_timings_importer REQUIRED)
+# add_env_executable(EXE quicklogic_timings_importer REQUIRED)
 add_env_executable(EXE xc7frames2bit REQUIRED)
 add_env_executable(EXE bitread REQUIRED)
 add_env_executable(EXE prjxray-config)
@@ -100,88 +100,88 @@ add_subdirectory(xilinx)
 
 get_target_property_required(YAPF env YAPF)
 add_custom_target(
-  check_python
-  COMMAND ${f4pga-arch-defs_SOURCE_DIR}/common/python_health_helper.sh -c -y ${YAPF}
-  )
+		check_python
+		COMMAND ${f4pga-arch-defs_SOURCE_DIR}/common/python_health_helper.sh -c -y ${YAPF}
+		)
 add_custom_target(
-  format_python
-  COMMAND ${f4pga-arch-defs_SOURCE_DIR}/common/python_health_helper.sh -f -y ${YAPF}
-  )
+		format_python
+		COMMAND ${f4pga-arch-defs_SOURCE_DIR}/common/python_health_helper.sh -f -y ${YAPF}
+		)
 
 get_target_property_required(FLAKE8 env FLAKE8)
 add_custom_target(
-  lint_python
-  COMMAND ${f4pga-arch-defs_SOURCE_DIR}/common/python_health_helper.sh -l -p "${FLAKE8}"
-  )
+		lint_python
+		COMMAND ${f4pga-arch-defs_SOURCE_DIR}/common/python_health_helper.sh -l -p "${FLAKE8}"
+		)
 
 
 add_custom_target(all_xc7_route_tests)
 
 
 if (NOT LIGHT_BUILD)
-add_dependencies(all_xc7_route_tests
-    all_dummy_artix7_xc7a50t-arty-swbut_test_route
-    all_dummy_artix7_xc7a50t-arty-uart_test_route
-    all_dummy_artix7_xc7a50t-basys3_test_route
-    )
+	add_dependencies(all_xc7_route_tests
+				all_dummy_artix7_xc7a50t-arty-swbut_test_route
+				all_dummy_artix7_xc7a50t-arty-uart_test_route
+				all_dummy_artix7_xc7a50t-basys3_test_route
+				)
 endif()
 
 add_custom_target(all_xc7_demos)
 if (NOT LIGHT_BUILD)
-add_dependencies(all_xc7_demos
-    all_arty-swbut_bin
-    all_arty-uart_bin
-    all_arty-full_bin
-    all_arty100t-full_bin
-    all_netv2-a100t_bin
-    all_basys3_bin
-    all_basys3-full_bin
-    all_pynqz1-full_bin
-    #all_basys3-bottom_bin
-    # TODO(#548) Zybo targets not currently working, so removed from all target.
-    #all_zybo_bin
-    all_zybo-full_bin
-    all_ax7050_bin
-    )
+	add_dependencies(all_xc7_demos
+				all_arty-swbut_bin
+				all_arty-uart_bin
+				all_arty-full_bin
+				all_arty100t-full_bin
+				all_netv2-a100t_bin
+				all_basys3_bin
+				all_basys3-full_bin
+				all_pynqz1-full_bin
+				#all_basys3-bottom_bin
+				# TODO(#548) Zybo targets not currently working, so removed from all target.
+				#all_zybo_bin
+				all_zybo-full_bin
+				all_ax7050_bin
+				)
 endif()
 
 add_custom_target(all_xc7_diff_fasm)
 if (NOT LIGHT_BUILD)
-add_dependencies(all_xc7_diff_fasm
-    all_artix7_diff_fasm
-    all_artix7_100t_diff_fasm
-    all_zynq7_diff_fasm
-    all_zynq7_z020_diff_fasm
-    )
+	add_dependencies(all_xc7_diff_fasm
+				all_artix7_diff_fasm
+				all_artix7_100t_diff_fasm
+				all_zynq7_diff_fasm
+				all_zynq7_z020_diff_fasm
+				)
 endif()
 
 add_custom_target(all_xc7)
 add_dependencies(all_xc7
-    all_xc7_demos
-    all_xc7_route_tests
-    all_xc7_tests
-    )
+				all_xc7_demos
+				all_xc7_route_tests
+				all_xc7_tests
+				)
 
 add_custom_target(all_xc7_200t)
 if (NOT LIGHT_BUILD)
-add_dependencies(all_xc7_200t
-    all_nexys_video_bin
-    all_nexys_video-mid_bin
-    )
+	add_dependencies(all_xc7_200t
+				all_nexys_video_bin
+				all_nexys_video-mid_bin
+				)
 endif()
 
 add_custom_target(all_demos)
 add_dependencies(all_demos
-    all_xc7_demos
-    )
+				all_xc7_demos
+				)
 
 add_custom_target(all_tests)
 add_dependencies(all_tests
-    all_xc7_tests
-    )
+				all_xc7_tests
+				)
 
 add_custom_target(docs)
 
 add_custom_target(print_qor
-    COMMAND ${PYTHON3} ${f4pga-arch-defs_SOURCE_DIR}/utils/print_qor.py ${f4pga-arch-defs_BINARY_DIR}
-    )
+				COMMAND ${PYTHON3} ${f4pga-arch-defs_SOURCE_DIR}/utils/print_qor.py ${f4pga-arch-defs_BINARY_DIR}
+				)
